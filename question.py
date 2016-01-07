@@ -1,6 +1,6 @@
 #coding=utf-8
 import MySQLdb
-from bs4 import BeautifulSoup
+from BeautifulSoup import *
 import json
 import re
 import time
@@ -57,7 +57,7 @@ class UpdateOneQuestion(threading.Thread):
         if questions == None:
             return
         else:
-            focus_amount = questions.get_text().replace('\n','')
+            focus_amount = questions.getText().replace('\n','')
             focus_amount = focus_amount.replace(u'人关注该问题','')
             focus_amount = focus_amount.replace(u'关注','')
 
@@ -72,7 +72,7 @@ class UpdateOneQuestion(threading.Thread):
         # Find out how many people answered this question.
         answer_amount = soup.find('h3',attrs={'id':'zh-question-answer-num'})
         if answer_amount != None:
-            answer_amount = answer_amount.get_text().replace(u' 个回答','')
+            answer_amount = answer_amount.getText().replace(u' 个回答','')
         else:
             answer_amount = soup.find('div',attrs={'class':'zm-item-answer'})
             if answer_amount != None:
@@ -87,7 +87,7 @@ class UpdateOneQuestion(threading.Thread):
         else:
             top_answer_votes = 0
             for t in top_answer:
-                t = t.get_text()
+                t = t.getText()
                 t = t.replace('K','000')
                 t = int(t)
                 if t > top_answer_votes:
@@ -108,7 +108,7 @@ class UpdateOneQuestion(threading.Thread):
             sql_str = "INSERT IGNORE INTO TOPIC (NAME, LAST_VISIT, LINK_ID, ADD_TIME) VALUES (%s, %s, %s, %s)"
             topicList = []
             for topic in topics:
-                topicName = topic.get_text().replace('\n','')
+                topicName = topic.getText().replace('\n','')
                 topicUrl = topic.get('href').replace('/topic/','')
                 #sql_str = sql_str + "('" + topicName + "',0," + topicUrl + "," + str(time_now) + "),"
                 topicList = topicList + [(topicName, 0, topicUrl, time_now)]

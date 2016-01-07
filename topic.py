@@ -1,6 +1,6 @@
 #coding=utf-8
 import MySQLdb
-from bs4 import BeautifulSoup
+from BeautifulSoup import *
 import json
 import re
 import time
@@ -46,16 +46,15 @@ class UpdateOneTopic(threading.Thread):
             return 0
 
         soup = BeautifulSoup(content)
-
         questions = soup.findAll('a',attrs={'class':'question_link'})
-
+        
         i = 0
         p_str = 'INSERT IGNORE INTO QUESTION (NAME, LINK_ID, FOCUS, ANSWER, LAST_VISIT, ADD_TIME, TOP_ANSWER_NUMBER) VALUES (%s, %s, %s, %s, %s, %s, %s)'
         anser_list = []
         time_now = int(time.time())
 
         for question in questions:
-            tem_text = question.get_text()
+            tem_text = question.getText()
             tem_id = question.get('href')
             tem_id = tem_id.replace('/question/','')
 
